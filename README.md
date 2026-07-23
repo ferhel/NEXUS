@@ -1,75 +1,91 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+<p align="right"><a href="README.en.md">🇬🇧 English version</a></p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🧠 Nexus
 
-## Available Scripts
+**Plataforma de apoyo académico cognitivo.** Combina un test psicométrico de estilos de aprendizaje con una sala de estudio que usa la cámara del propio dispositivo para medir el nivel de presencia y concentración en tiempo real — todo procesado en el navegador, sin backend ni envío de datos a servidores externos.
 
-In the project directory, you can run:
+> Proyecto personal construido de principio a fin (producto, diseño de la métrica y código) para explorar visión por computador en el navegador y aprendizaje automático on-device aplicados a un problema real: por qué nos cuesta mantenernos concentrados al estudiar.
 
-### `npm start`
+<p align="center">
+  <img src="docs/screenshots/01-inicio.png" width="49%" alt="Pantalla de inicio de Nexus" />
+  <img src="docs/screenshots/06-sala-estudio.png" width="49%" alt="Sala de estudio con temporizador Pomodoro y seguimiento de presencia" />
+</p>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ¿Qué hace?
 
-### `npm test`
+### 1. Test cognitivo (36 ítems)
+Un cuestionario psicométrico propio que mide 5 dimensiones del estilo de aprendizaje — **Estructural, Reactiva, Aplicada, Estratégica y Metacognitiva** — con ítems invertidos, preguntas de validez (para detectar respuestas poco fiables) y un bloque bipolar para determinar la tendencia *top-down / bottom-up*. El resultado se traduce en un **arquetipo de aprendizaje** (Arquitecto, Corredor, Ingeniero, Estratega, Adaptativo…) con técnicas de estudio recomendadas y su base científica de referencia (Rumelhart, Kolb, Zimmerman, Flavell).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<p align="center">
+  <img src="docs/screenshots/02-test-pregunta.png" width="49%" alt="Pregunta del test cognitivo con escala Likert" />
+  <img src="docs/screenshots/03-test-resultados.png" width="49%" alt="Resultados del test con gráfico de radar y arquetipo" />
+</p>
 
-### `npm run build`
+### 2. Sala de estudio con seguimiento de presencia
+Con permiso del usuario, la cámara analiza el frame cada 2 segundos usando **face-api.js** (TinyFaceDetector + landmarks faciales) y extrae un vector de 6 características normalizadas (yaw, pitch, brillo, tamaño relativo del rostro, simetría facial, presencia de manos). Ese vector se clasifica con un modelo **KNN** propio — calibrado por cada usuario en una sesión inicial de ~30 segundos, no un modelo pre-entrenado genérico — y se usa **K-Means** al final de cada sesión para detectar patrones de comportamiento nuevos que el modelo aún no conoce.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Con eso se calcula un **Índice de Presencia Visual (IPV)** por sesión, que queda registrado en un historial con gráfica de tendencia y calendario de racha de estudio.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<p align="center">
+  <img src="docs/screenshots/04-calibracion.png" width="49%" alt="Pantalla de calibración personal" />
+  <img src="docs/screenshots/05-historial.png" width="49%" alt="Historial de sesiones con tendencia de IPV" />
+</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+> La captura de la Sala de Estudio usa un dispositivo de cámara simulado (patrón de prueba estándar de Chromium) para tomar la screenshot sin exponer una cara real — el flujo y la interfaz son exactamente los de producción.
 
-### `npm run eject`
+### 3. Ambiente de estudio
+Modos de sonido para acompañar la sesión: Lofi, sonidos de agua, ondas binaurales (vía Spotify) y **ruido marrón generado matemáticamente con Web Audio API**, sin archivos de audio de por medio.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4. Extras
+Notas rápidas durante la sesión, feedback post-sesión, historial con filtrado por materia, y tema claro/oscuro persistente.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Privacidad por diseño
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+No es un eslogan de marketing: **no hay backend**. El vídeo nunca sale del navegador, no se graba ni se sube a ningún sitio — el frame se procesa en memoria y se descarta. Lo único que persiste es el vector numérico de 6 valores (no la imagen) y el modelo KNN, guardados en `localStorage` del propio dispositivo. Es una decisión de arquitectura, no solo de política de datos.
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Stack técnico
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Área | Tecnología |
+|---|---|
+| Framework | React 19 + React Router 7 |
+| Visión por computador | face-api.js (TinyFaceDetector + landmarks 68 puntos), MediaPipe Hands |
+| Machine learning | `ml-knn` (clasificación) + `ml-kmeans` (detección de patrones nuevos), 100% client-side |
+| Audio | Web Audio API (síntesis de tonos y ruido, sin librerías externas) |
+| Persistencia | `localStorage` (sin base de datos, sin servidor) |
+| Build | Create React App / react-scripts |
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Instalación local
 
-### Analyzing the Bundle Size
+```bash
+npm install
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Abre `http://localhost:3000`. La app pedirá permiso de cámara al entrar a la Sala de Estudio; sin ese permiso, el resto de la plataforma (test cognitivo, historial, notas) funciona igual.
 
-### Making a Progressive Web App
+```bash
+npm test    # tests con react-scripts/Testing Library
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Estado del proyecto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Es un prototipo funcional, no un producto en producción: no tiene backend, cuentas de usuario ni sincronización entre dispositivos — todo vive en el `localStorage` del navegador donde se usa. El modelo de clasificación se calibra por persona y por sesión de navegador, así que su precisión depende de esa calibración inicial y de las condiciones de luz/cámara.
 
-### Deployment
+Cosas que tengo en el radar como siguientes pasos: persistencia fuera del navegador (para no perder el historial al limpiar caché), tests automatizados de los módulos de ML/features, y accesibilidad (navegación por teclado, lectores de pantalla) en las pantallas de test y sala de estudio.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Sobre este proyecto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-# blue-test
-Repositorio para el proyecto Blue.
->>>>>>> 9f654f75756dfb48339243f37f278b2ebf4b1f5f
+Lo construí para tener una excusa concreta de meterme a fondo en visión por computador en el navegador y ML on-device, con un enfoque explícito en que los datos sensibles (vídeo de la cara de alguien estudiando) nunca deberían necesitar salir del dispositivo para ser útiles. Si te interesa hablar del proyecto, del enfoque técnico o de posibles colaboraciones, escríbeme.
