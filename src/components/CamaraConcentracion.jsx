@@ -40,7 +40,6 @@ export default function CamaraConcentracion({ activa = true, onEstadoChange, onM
   const bufferEstados   = useRef([]);
   const estadoRef       = useRef("cargando");
 
-  const [estadoActual,  setEstadoActual]  = useState("cargando");
   const [errorMsg,      setErrorMsg]      = useState(null);
 
   // Ref para no reiniciar el intervalo de detección cada vez que el padre
@@ -51,7 +50,6 @@ export default function CamaraConcentracion({ activa = true, onEstadoChange, onM
   const emitirEstado = useCallback((nuevo) => {
     if (!mountedRef.current) return;
     estadoRef.current = nuevo;
-    setEstadoActual(nuevo);
     onEstadoChange?.(nuevo);
   }, [onEstadoChange]);
 

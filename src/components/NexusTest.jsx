@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { arquetiposData } from "../lib/arquetiposData";
 import { useTheme } from "../ThemeContext";
 
 // ─────────────────────────────────────────────────────────────
 // CONFIGURACIÓN PSICOMÉTRICA (36 ÍTEMS)
 // ─────────────────────────────────────────────────────────────
-const DIMENSIONES = { E: "Estructural", R: "Reactiva", A: "Aplicada", St: "Estratégica", M: "Metacognitiva" };
-
 const PREGUNTAS_RAW = [
   { id: "E1", dim: "E", texto: "Antes de estudiar un tema nuevo, dedico tiempo a identificar su estructura general.", invertido: false },
   { id: "E2", dim: "E", texto: "Elaboro esquemas o mapas conceptuales como parte habitual de mi estudio.", invertido: false },
@@ -77,7 +74,6 @@ function crearEstilosBase(theme) {
 // COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────────────────────
 export default function NexusTest() {
-  const navigate = useNavigate();
   const [estado, setEstado] = useState("inicio");
   const [orden, setOrden] = useState([]);
   const [idx, setIdx] = useState(0);

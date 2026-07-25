@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { reentrenar } from "../lib/nexusModel";
 import { INTERVALO_MS } from "./CamaraConcentracion";
 import { useTheme } from "../ThemeContext";
@@ -156,7 +155,6 @@ function CalendarioMensual({ historialPrevio, reporteActual }) {
 // ─────────────────────────────────────────────────────────────
 export default function FeedbackSesion({ reporte, onContinuar }) {
   const { t } = useTheme();
-  const navigate = useNavigate();
   const [notas, setNotas] = useState([]);
   const [tareas, setTareas] = useState([]);
   const [historialPrevio, setHistorialPrevio] = useState([]);
